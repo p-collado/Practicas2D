@@ -3,7 +3,7 @@ class Vec2
 {
 
 private:
-
+  //DUDA MÉTODOS STATICS; ATRIBUTOS PRIVADOS
   float fx;
   float fy;
 
@@ -20,9 +20,9 @@ public:
   Vec2 operator/(Vec2& _vec);
   Vec2 ValorAbsoluto();
   float Longitud();
-  double ProductoEscalar(Vec2* _vec1, Vec2* _vec2, float _ángulo);
+  double ProductoEscalar(Vec2* _vec1);
   Vec2 Normalvector(Vec2 _vec);
-  float Angle(const Vec2& other) const;
-  float distance(const Vec2& other) const;
+  float Angle(Vec2& other);
+  float Distance(Vec2& other);
 };
 

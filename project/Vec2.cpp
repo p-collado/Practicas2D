@@ -70,9 +70,9 @@ float Vec2::Longitud()
   return fLong;
 }
 
-double Vec2::ProductoEscalar(Vec2* _vec1, Vec2* _vec2, float _angulo)
+double Vec2::ProductoEscalar(Vec2* _Other)
 {
-  return _vec1->Longitud() * _vec2->Longitud() * cos(_angulo);
+  return (this->GetfX() * _Other->GetfX()) + (this->GetfY() * _Other->GetfY());
 }
 
 Vec2 Vec2::Normalvector(Vec2 _vec)
@@ -80,10 +80,12 @@ Vec2 Vec2::Normalvector(Vec2 _vec)
   return *(new Vec2(_vec.fx / _vec.Longitud(), _vec.fy / _vec.Longitud()));
 }
 
-float Vec2::Angle(const Vec2& other) const
+float Vec2::Angle(Vec2 &other)
 {
-  float angle = 0.f;
+  return acos(this->ProductoEscalar(&other) / (this->Longitud() * other.Longitud()));
+}
 
- // angle = (fx * other.);
+float Distance(Vec2& other) 
+{
   return 0.f;
 }
