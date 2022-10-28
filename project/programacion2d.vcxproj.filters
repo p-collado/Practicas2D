@@ -29,5 +29,8 @@
     <ClInclude Include="..\lib\litegfx.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\lib\stb_image.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
