@@ -23,27 +23,32 @@ void Vec2::SetfY(float _y)
   fy = _y;
 }
 
-Vec2 Vec2::operator=(Vec2& _vec)
+Vec2 Vec2::operator=(Vec2& _vec) 
 {
   return *(new Vec2(fx = _vec.GetfX(), fy = _vec.GetfY()));
 }
 
-Vec2 Vec2::operator+(Vec2& _vec)
+Vec2 Vec2::operator+(Vec2& _vec) const
 {
   return *(new Vec2(fx + _vec.GetfX(), fy + _vec.GetfY()));
 }
 
-Vec2 Vec2::operator*(Vec2& _vec)
+Vec2 Vec2::operator*(Vec2& _vec) const
 {
   return *(new Vec2(fx * _vec.GetfX(), fy * _vec.GetfY()));
 }
 
-Vec2 Vec2::operator/(Vec2& _vec)
+Vec2 Vec2::operator/(Vec2& _vec) const
 {
   return *(new Vec2(fx / _vec.GetfX(), fy / _vec.GetfY()));
 }
 
-Vec2 Vec2::ValorAbsoluto()
+Vec2 Vec2::operator-(Vec2& _vec) const
+{
+  return *(new Vec2 (fx - _vec.GetfX(), fy - _vec.GetfY()));
+}
+
+Vec2 Vec2::ValorAbsoluto() const
 {
   Vec2 Temp;
 
@@ -61,7 +66,7 @@ Vec2 Vec2::ValorAbsoluto()
 
 }
 
-float Vec2::Longitud()
+float Vec2::Longitud() const
 {
   float fLong = 0.f;
 
@@ -70,22 +75,23 @@ float Vec2::Longitud()
   return fLong;
 }
 
-double Vec2::ProductoEscalar(Vec2* _Other)
+double Vec2::ProductoEscalar(Vec2* _Other) const
 {
   return (this->GetfX() * _Other->GetfX()) + (this->GetfY() * _Other->GetfY());
 }
 
-Vec2 Vec2::Normalvector(Vec2 _vec)
+Vec2 Vec2::Normalvector(Vec2 _vec) const
 {
   return *(new Vec2(_vec.fx / _vec.Longitud(), _vec.fy / _vec.Longitud()));
 }
 
-float Vec2::Angle(Vec2 &other)
+float Vec2::Angle(Vec2 &other) const
 {
-  return acos(this->ProductoEscalar(&other) / (this->Longitud() * other.Longitud()));
+  //acos(this->ProductoEscalar(&other) / (this->Longitud() * other.Longitud())) * 57.29577;
+  return atan2(other.GetfY()-fy,other.GetfX() - fx) * 57.29577;
 }
 
-float Distance(Vec2& other) 
+float Vec2::Distance(Vec2& other) const
 {
-  return 0.f;
+  return ((*this - other).Longitud());
 }
