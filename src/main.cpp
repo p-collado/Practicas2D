@@ -10,9 +10,6 @@
 
 #define HEIGHT 720
 #define WIDTH 1280
-#define ANGULO 32 * 0.0174532925
-#define PI 3.14
-
 
 using namespace std;
 
@@ -23,6 +20,18 @@ template <typename T> std::string stringFromNumber(T val)
 	return stream.str();
 }
 
+
+struct sTam {
+	int ancho;
+	int alto;
+	int* Comp;
+};
+
+ltex_t* loadTexture(const char* filename, sTam* Stam, unsigned char* _Buffer);
+
+sTam Fire, malla, fondo, filtro;
+
+
 int main() 
 {
 
@@ -32,21 +41,16 @@ int main()
 	double x = 0.f;
 	double y = 0.f;
 	double time = 0.f;
-	float angle = 1.f;
+	int angle = 1;
 	double deltaTime = 0.f;
 	float escalado = 0.010f;
 	int ancho = 256;
 	int alto = 256;
 
-
-	struct sTam {
-		int ancho;
-		int alto;
-		int* Comp;
-	};
-
-	printf("%f", cos(45));
-
+	unsigned char* ptrbackground = nullptr;
+	unsigned char* ptrmalla = nullptr;
+	unsigned char* ptrs = nullptr;
+	unsigned char* ptrfilter = nullptr;
 
 	if (!glfwInit())
 	{
@@ -56,38 +60,36 @@ int main()
 	
 
 	Vec2 Cursor(x, y);
-	sTam Fire, malla, fondo, filtro;
+	/*sTam Fire, malla, fondo, filtro;*/
 
 	GLFWwindow* pWindow = glfwCreateWindow(WIDTH, HEIGHT, "Prueba", nullptr, nullptr);
 	glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	glfwMakeContextCurrent(pWindow);
 	
 
-	Fire.Comp = nullptr;
+	/*Fire.Comp = nullptr;
 	malla.Comp = nullptr;
 	fondo.Comp = nullptr;
-	filtro.Comp = nullptr;
+	filtro.Comp = nullptr;*/
 
-	unsigned char* ptrbackground = stbi_load("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\wall.jpg", &fondo.ancho, &fondo.alto, fondo.Comp, 4);
+	/*unsigned char* ptrbackground = stbi_load("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\wall.jpg", &fondo.ancho, &fondo.alto, fondo.Comp, 4);
 	unsigned char* ptrmalla = stbi_load("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\grille.png", &malla.ancho, &malla.alto, malla.Comp, 4);
 	unsigned char* ptrs = stbi_load("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\fire.png",&Fire.ancho,&Fire.alto,Fire.Comp,4);
-	unsigned char* ptrfilter = stbi_load("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\light.png", &filtro.ancho, &filtro.alto, filtro.Comp, 4);
+	unsigned char* ptrfilter = stbi_load("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\light.png", &filtro.ancho, &filtro.alto, filtro.Comp, 4);*/
 
 
-	ltex_t* ptrmalla2 = ltex_alloc(malla.ancho, malla.alto, 0);
-	ltex_t* ptrBaack = ltex_alloc(fondo.ancho, fondo.alto, 0);
-	ltex_t* ptr = ltex_alloc(Fire.ancho, Fire.alto, 0);
-	ltex_t* ptrlight = ltex_alloc(filtro.ancho, filtro.alto, 0);
+	ltex_t* ptrmalla2 = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\grille.png", &malla, ptrmalla); /*= ltex_alloc(malla.ancho, malla.alto, 0);*/
+	ltex_t* ptrBaack = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\wall.jpg", &fondo, ptrbackground); /*= ltex_alloc(fondo.ancho, fondo.alto, 0); */
+	ltex_t* ptr = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\fire.png", &Fire, ptrs); /*ltex_alloc(Fire.ancho, Fire.alto, 0);*/
+	ltex_t* ptrlight = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\light.png", &filtro, ptrfilter); /*= ltex_alloc(filtro.ancho, filtro.alto, 0);*/
 
-	ltex_setpixels(ptrmalla2, ptrmalla);
-	ltex_setpixels(ptrBaack, ptrbackground);
-	ltex_setpixels(ptr, ptrs);
-	ltex_setpixels(ptrlight, ptrfilter);
-
+	//ltex_setpixels(ptrmalla2, ptrmalla);
+	//ltex_setpixels(ptrBaack, ptrbackground);
+	//ltex_setpixels(ptr, ptrs);
+	//ltex_setpixels(ptrlight, ptrfilter);
 
 	while (!glfwWindowShouldClose(pWindow))
 	{
-		
 
 		/* Poll for and process events */
 		glfwPollEvents();
@@ -112,9 +114,7 @@ int main()
 		
 
 		lgfx_setblend(BLEND_ADD);
-
-		
-		ltex_drawrotsized(ptr, x, y, cos(PI) * 10, 0.5, 0.8, ancho + (256 * escalado * deltaTime), alto + (256 * escalado * deltaTime), 0, 0, 1, 1);
+		ltex_drawrotsized(ptr, x, y, (cos(angle*0.0174533) * 10), 0.5, 0.8, ancho + (256 * escalado * deltaTime), alto + (256 * escalado * deltaTime), 0, 0, 1, 1);
 
 		ancho += (256 * escalado);
 		alto += (256 * escalado);
@@ -123,8 +123,14 @@ int main()
 		{
 			escalado *= -1;
 		}
-
+	
 		angle++;
+		angle = angle % 360;
+
+		if (angle == 10)
+		{
+			printf("time : %f\n", time);
+		}
 	
 		lgfx_setblend(BLEND_ALPHA);
 		for (size_t i = 0; i < 7 ; i++)
@@ -160,4 +166,13 @@ int main()
 
 	void glfwTerminate();
 	return 0;
+}
+
+ltex_t* loadTexture(const char* filename, sTam* struc, unsigned char* _Buffer) //DUDA ESTO ESTA BIEN????
+{
+	ltex_t* temp;
+	_Buffer = stbi_load(filename, &struc->ancho, &struc->alto, struc->Comp, 4);
+	temp = ltex_alloc(struc->ancho, struc->alto, 0);
+	ltex_setpixels(temp, _Buffer);
+	return temp;
 }
