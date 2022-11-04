@@ -31,12 +31,13 @@ int main()
 
 	double x = 0.f;
 	double y = 0.f;
+	int rotdir = 10;
 	double time = 0.f;
-	int angle = 1;
+	float angle = 1.f;
 	double deltaTime = 0;
-	float escalado = 0.010f;
-	int ancho = 256;
-	int alto = 256;
+	float escalado = 128.f;
+	float ancho = 256.f;
+	float alto = 256.f;
 
 	if (!glfwInit())
 	{
@@ -52,10 +53,10 @@ int main()
 	glfwMakeContextCurrent(pWindow);
 
 
-	ltex_t* ptrmalla2 = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\grille.png");
-	ltex_t* ptrBaack = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\wall.jpg");
-	ltex_t* ptr = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\fire.png");
-	ltex_t* ptrlight = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\light.png");
+	ltex_t* ptrmalla2 = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\sprites\\grille.png");
+	ltex_t* ptrBaack = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\sprites\\wall.jpg");
+	ltex_t* ptr = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\sprites\\fire.png");
+	ltex_t* ptrlight = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\sprites\\light.png");
 
 	while (!glfwWindowShouldClose(pWindow) && time < 20)
 	{
@@ -81,26 +82,26 @@ int main()
 			for(size_t j = 0; j < 3 ; j++)
 				ltex_drawrotsized(ptrBaack, i * 415, j * 304, 0, 0, 0, 415, 304, 0, 0, 1, 1);
 		}
-		
 
 		lgfx_setblend(BLEND_ADD);
-		ltex_drawrotsized(ptr, x, y, /*(cos(angle*0.0174533)*/ 10 * static_cast<float>(deltaTime), 0.5, 0.8, ancho + (256 * escalado * deltaTime), alto + (256 * escalado * deltaTime), 0, 0, 1, 1);
+		ltex_drawrotsized(ptr, x, y, angle , 0.5, 0.8, ancho,alto, 0, 0, 1, 1);
 
-		ancho += (256 * escalado);
-		alto += (256 * escalado);
 
 		if (ancho > (256 * 1.2) || ancho < (256*0.8))
 		{
 			escalado *= -1;
 		}
-	
-		angle++;
-		angle = angle % 360;
 
-		if (angle == 10)
+		ancho += escalado * deltaTime;
+		alto += escalado * deltaTime;
+	
+		if (angle > 10 || angle < -10)
 		{
-			printf("time : %f\n", time);
+			rotdir *= -1;
 		}
+		angle += rotdir * deltaTime;
+
+		printf("%f, %f\n",ancho,alto);
 	
 		lgfx_setblend(BLEND_ALPHA);
 		for (size_t i = 0; i < 7 ; i++)
