@@ -1,12 +1,16 @@
 #define LITE_GFX_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_TRUETYPE_IMPLEMENTATION
 
 #include <litegfx.h>
 #include <glfw3.h>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include "..\project\Vec2.h"
 #include "stb_image.h"
+#include "stb_truetype.h"
+
 
 #define HEIGHT 720
 #define WIDTH 1280
@@ -26,18 +30,50 @@ ltex_t* loadTexture(const char* filename);
 int main() 
 {
 
+	FILE* pFile;
+	fopen_s(&pFile,"C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\fonts\\SFSlapstickComic.ttf", "r");
+
+	unsigned char max[25276];
+	int leidos = 0;
+
+	int contador = 0;
+
+	fseek(pFile, 0, SEEK_END);
+
+	rewind(pFile);
+
+	fread_s(max, 25276 * sizeof(char), sizeof(char), 25276, pFile);
+
+	unsigned char* pixels = new unsigned char[512 * 512];
+	stbtt_bakedchar* data = new stbtt_bakedchar[57];
+	int bitmap = 0;
+	bitmap = stbtt_BakeFontBitmap(max, 0, 16.f, pixels, 512 ,512, 65, 57, data);
+
+	printf("Alpha solo: %d", bitmap);
+  unsigned char* colorbuffer = new unsigned char[512 * 512 * 4];
+	int j = 0;
+	for (size_t i = 0; i < 512 * 512; i++)
+	{
+		colorbuffer[i] = 0.5;
+		if (i % 4)
+		{
+			colorbuffer[i-1] = pixels[j];
+			j++;
+		}
+	}
+
+	for (size_t i = 0; i < 512*512*4; i++)
+	{
+		printf("%d, %c\n",i, colorbuffer[i]);
+	}
+
 	string title;
 	bool direc = true;
 
 	double x = 0.f;
 	double y = 0.f;
-	int rotdir = 10;
 	double time = 0.f;
-	float angle = 1.f;
 	double deltaTime = 0;
-	float escalado = 128.f;
-	float ancho = 256.f;
-	float alto = 256.f;
 
 	if (!glfwInit())
 	{
@@ -53,11 +89,6 @@ int main()
 	glfwMakeContextCurrent(pWindow);
 
 
-	ltex_t* ptrmalla2 = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\sprites\\grille.png");
-	ltex_t* ptrBaack = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\sprites\\wall.jpg");
-	ltex_t* ptr = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\sprites\\fire.png");
-	ltex_t* ptrlight = loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\sprites\\light.png");
-
 	while (!glfwWindowShouldClose(pWindow) && time < 20)
 	{
 
@@ -72,57 +103,7 @@ int main()
 		/* Render here */
 		lgfx_setup2d(WIDTH, HEIGHT);
 		lgfx_clearcolorbuffer(1.f, 1.f, 1.f);
-		glClear(GL_COLOR_BUFFER_BIT);
 	
-
-		lgfx_setblend(BLEND_SOLID);
-
-		for (size_t i = 0; i < 4; i++)
-		{
-			for(size_t j = 0; j < 3 ; j++)
-				ltex_drawrotsized(ptrBaack, i * 415, j * 304, 0, 0, 0, 415, 304, 0, 0, 1, 1);
-		}
-
-		lgfx_setblend(BLEND_ADD);
-		ltex_drawrotsized(ptr, x, y, angle , 0.5, 0.8, ancho,alto, 0, 0, 1, 1);
-
-
-		if (ancho > (256 * 1.2) || ancho < (256*0.8))
-		{
-			escalado *= -1;
-		}
-
-		ancho += escalado * deltaTime;
-		alto += escalado * deltaTime;
-	
-		if (angle > 10 || angle < -10)
-		{
-			rotdir *= -1;
-		}
-		angle += rotdir * deltaTime;
-
-		printf("%f, %f\n",ancho,alto);
-	
-		lgfx_setblend(BLEND_ALPHA);
-		for (size_t i = 0; i < 7 ; i++)
-		{
-			for (size_t j = 0; j < 4; j++)
-				ltex_drawrotsized(ptrmalla2, i * 205, j * 205, 0, 0, 0, 205, 205, 0, 0, 1, 1);
-		}
-
-		lgfx_setblend(BLEND_MUL);
-		ltex_drawrotsized(ptrlight, x-ptrlight->width/2, y - ptrlight->height/2, 0, 0, 0, 1024, 1024, 0, 0, 1, 1);
-
-		lgfx_setcolor(0, 0, 0, 0);
-		//arriba
-		lgfx_drawrect(x - 3200/2 , y - 1200, 3200, 720);
-		//abajo
-		lgfx_drawrect(x - 3200/2 , y + 500 , 3200, 720);
-		//derecha
-		lgfx_drawrect(x + 500, y - 750, 1280, 1500);
-		//izquierda
-		lgfx_drawrect(x - 1780 ,y - 750, 1280, 1500);
-		
 		
 		time = glfwGetTime();
 
@@ -130,10 +111,10 @@ int main()
 		glfwSwapBuffers(pWindow);
 	}
 
-	stbi_image_free(ptrmalla2);
-	stbi_image_free(ptrBaack);
-	stbi_image_free(ptr);
-	stbi_image_free(ptrlight);
+	//stbi_image_free();
+	//stbi_image_free();
+	//stbi_image_free();
+	//stbi_image_free();
 
 	void glfwTerminate();
 	return 0;
