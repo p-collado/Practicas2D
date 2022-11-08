@@ -1,6 +1,10 @@
 Vec2 vec;
 
+#define STB_TRUETYPE_IMPLEMENTATION
+
 #include<litegfx.h>
+#include <iostream>
+#include "stb_truetype.h"
 
 class cFont
 {
@@ -15,7 +19,7 @@ public:
 
 	static cFont* load(const char* _filename, float height, float _r)
 	{
-		cFont* temp;
+		cFont* temp = new cFont();
 		int tamaño;
 		fopen_s(&pFile, _filename, "r");
 		fseek(pFile, 0, SEEK_END);
@@ -27,6 +31,7 @@ public:
 		data = new stbtt_bakedchar[58];
 		int bitmap = 0;
 		bitmap = stbtt_BakeFontBitmap(max, 0, 64.f, pixels, 1024, 1024, 65, 58, data);
+
 		if (bitmap < 0 || bitmap == 0)
 		{
 			printf("ERROR: %d", bitmap);
@@ -47,7 +52,7 @@ public:
 		}
 		memorytexture = ltex_alloc(1024, 1024, 0);
 		ltex_setpixels(memorytexture, colorbuffer);
-
+		return temp;
 	}
 
 	float getHeight() const;

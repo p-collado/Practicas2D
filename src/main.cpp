@@ -1,16 +1,12 @@
 #define LITE_GFX_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#define STB_TRUETYPE_IMPLEMENTATION
+//#define STB_TRUETYPE_IMPLEMENTATION
 
-//#include <litegfx.h>
-#include <glfw3.h>
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include "..\project\Vec2.h"
-#include "stb_image.h"
-#include "stb_truetype.h"
 #include "..\project\CFont.h"
+#include <litegfx.h>
+#include <glfw3.h>
+#include <iostream>
+#include "..\project\Vec2.h"
+//#include "stb_truetype.h"
 #include <time.h>
 #include<stdlib.h>
 
@@ -27,7 +23,7 @@ template <typename T> std::string stringFromNumber(T val)
 	return stream.str();
 }
 
-ltex_t* loadTexture(const char* filename);
+//ltex_t* loadTexture(const char* filename);
 
 float xpos;
 float ypos;
@@ -35,7 +31,7 @@ float ypos;
 int main() 
 {
 
-	cFont obj =  cFont::contruirCFont();
+	/*cFont obj =  cFont::contruirCFont();*/
 	srand(time(NULL));
 
 	if (!glfwInit())
@@ -54,39 +50,41 @@ int main()
 	
 	lgfx_setup2d(WIDTH, HEIGHT);
 
-	obj.load("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\fonts\\SFSlapstickComic.ttf", 1024, rand() % 255);
+	cFont* temp;
 
-	//FILE* pFile;
-	//fopen_s(&pFile,"C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\fonts\\SFSlapstickComic.ttf", "r");
+	temp = cFont::load("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\fonts\\SFSlapstickComic.ttf", 1024, rand() % 255);
 
-	//unsigned char max[25276];
-	//int leidos = 0;
+	/*FILE* pFile;
+	fopen_s(&pFile,"C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\fonts\\SFSlapstickComic.ttf", "r");
 
-	//int contador = 0;
+	unsigned char max[25276];
+	int leidos = 0;
 
-	//fseek(pFile, 0, SEEK_END);
-	//
-	//rewind(pFile);
+	int contador = 0;
 
-	//fread_s(max, 25276 * sizeof(char), sizeof(char), 25276, pFile);
+	fseek(pFile, 0, SEEK_END);
+	
+	rewind(pFile);
 
-	//unsigned char* pixels = new unsigned char[512 * 512];
-	//stbtt_bakedchar* data = new stbtt_bakedchar[58];
-	//int bitmap = 0;
-	//bitmap = stbtt_BakeFontBitmap(max, 0, 64.f, pixels, 512 ,512, 65, 58, data);
+	fread_s(max, 25276 * sizeof(char), sizeof(char), 25276, pFile);
 
-	//printf("Alpha solo: %d", bitmap);
- // unsigned char* colorbuffer = new unsigned char[512 * 512 * 4];
-	//int j = 0;
-	//for (size_t i = 1; i < 512 * 512 * 4; i++)
-	//{
-	//	colorbuffer[i] = 128;
-	//	if (!(i % 4))
-	//	{
-	//		colorbuffer[i-1] = pixels[j];
-	//		j++;
-	//	}
-	//}
+	unsigned char* pixels = new unsigned char[512 * 512];
+	stbtt_bakedchar* data = new stbtt_bakedchar[58];
+	int bitmap = 0;
+	bitmap = stbtt_BakeFontBitmap(max, 0, 64.f, pixels, 512 ,512, 65, 58, data);
+
+	printf("Alpha solo: %d", bitmap);
+  unsigned char* colorbuffer = new unsigned char[512 * 512 * 4];
+	int j = 0;
+	for (size_t i = 1; i < 512 * 512 * 4; i++)
+	{
+		colorbuffer[i] = 128;
+		if (!(i % 4))
+		{
+			colorbuffer[i-1] = pixels[j];
+			j++;
+		}
+	}*/
 
 	//ltex_t* memorytexture;
 	//memorytexture = ltex_alloc(512, 512, 0);
@@ -105,7 +103,7 @@ int main()
 	double deltaTime = 0;
 	
 	stbtt_aligned_quad quad;
-	stbtt_GetBakedQuad(obj.data, 512, 512, 1, &xpos, &ypos, &quad, true);
+	stbtt_GetBakedQuad(temp->data, 512, 512, 1, &xpos, &ypos, &quad, true);
 
 	while (!glfwWindowShouldClose(pWindow) && time < 20)
 	{
@@ -122,7 +120,7 @@ int main()
 		lgfx_clearcolorbuffer(0.f, 0.f, 0.f);
 		
 		lgfx_setblend(BLEND_ALPHA);
-		ltex_drawrotsized(obj.memorytexture, xpos, ypos, 0, 0, 0, 200, 200, quad.s0,quad.t0,quad.s1,quad.t1);
+		ltex_drawrotsized(temp->memorytexture, xpos, ypos, 0, 0, 0, 200, 200, quad.s0,quad.t0,quad.s1,quad.t1);
 		
 		time = glfwGetTime();
 
@@ -139,15 +137,15 @@ int main()
 	return 0;
 }
 
-ltex_t* loadTexture(const char* filename)
-{
-	ltex_t* temp;
-	int ancho;
-	int alto;
-	int comp;
-	unsigned char* _Buffer;
-	_Buffer = stbi_load(filename, &ancho, &alto, &comp, 4);
-	temp = ltex_alloc(ancho, alto, 0);
-	ltex_setpixels(temp, _Buffer);
-	return temp;
-}
+//ltex_t* loadTexture(const char* filename)
+//{
+//	ltex_t* temp;
+//	int ancho;
+//	int alto;
+//	int comp;
+//	unsigned char* _Buffer;
+//	_Buffer = stbi_load(filename, &ancho, &alto, &comp, 4);
+//	temp = ltex_alloc(ancho, alto, 0);
+//	ltex_setpixels(temp, _Buffer);
+//	return temp;
+//}
