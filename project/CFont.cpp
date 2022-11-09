@@ -73,7 +73,7 @@ Vec2 cFont::getTextSize(const char* _text) const
 	for (size_t i = 0; i < strlen(_text); i++)
 	{
 		stbtt_GetBakedQuad(data, 1024, 1024, _text[i] - 32, aux, aux, &quad, true);
-		sumax += quad.x1 - quad.x0;
+		sumax += (quad.x1 - quad.x0);
 		if (quad.y1 - quad.y0 >= maxy)
 		{
 			maxy = quad.y1 - quad.y0;

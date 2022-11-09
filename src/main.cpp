@@ -69,7 +69,7 @@ int main()
 
 	float tamaño = 0.f;
 
-	while (!glfwWindowShouldClose(pWindow) && time < 5)
+	while (!glfwWindowShouldClose(pWindow))
 	{
 		deltaTime = glfwGetTime() - time;
 		/* Poll for and process events */
@@ -87,8 +87,9 @@ int main()
 			}
 			else 
 			{
-				if (instances[choosen]->font->getTextSize("Hello Word").GetfX() <= 0)
+				if ((instances[choosen]->font->getTextSize("Hello Word").GetfX() + instances[choosen]->pos.GetfX()) <= 0.f)
 				{
+					printf("%f", instances[choosen]->font->getTextSize("Hello World").GetfX());
 					instances[choosen]->active = false;
 				}
 			}
