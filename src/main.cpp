@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-#define LITE_GFX_IMPLEMENTATION
-//#define STB_TRUETYPE_IMPLEMENTATION
-
-#include "..\project\CFont.h"
-#include <litegfx.h>
-#include <glfw3.h>
-#include <iostream>
-#include "..\project\Vec2.h"
-//#include "stb_truetype.h"
-=======
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "..\project\cFont.h"
 #define LITE_GFX_IMPLEMENTATION
@@ -17,7 +6,6 @@
 #include <glfw3.h>
 //#include "..\project\Vec2.h"
 //#include "stb_truetype.h
->>>>>>> Practica 3 arreglo includes
 #include <time.h>
 #include <stdlib.h>
 //#include <fstream>
@@ -44,11 +32,6 @@ float ypos;
 
 int main() 
 {
-<<<<<<< HEAD
-
-	/*cFont obj =  cFont::contruirCFont();*/
-=======
->>>>>>> Practica 3 arreglo includes
 	srand(time(NULL));
 
 	if (!glfwInit())
@@ -67,14 +50,9 @@ int main()
 	
 	lgfx_setup2d(WIDTH, HEIGHT);
 
-<<<<<<< HEAD
-	cFont* temp;
-=======
 	cFont* font = cFont::load("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\fonts\\SFSlapstickComic.ttf", 1024, rand() % 255);
->>>>>>> Practica 3 arreglo includes
 
-	temp = cFont::load("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\fonts\\SFSlapstickComic.ttf", 1024, rand() % 255);
-
+	
 	/*FILE* pFile;
 	fopen_s(&pFile,"C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\fonts\\SFSlapstickComic.ttf", "r");
 
@@ -119,11 +97,9 @@ int main()
 	double deltaTime = 0;
 	
 	stbtt_aligned_quad quad;
-<<<<<<< HEAD
-	stbtt_GetBakedQuad(temp->data, 512, 512, 1, &xpos, &ypos, &quad, true);
-=======
+
 	stbtt_GetBakedQuad(font->data, 1024, 1024, 1, &xpos, &ypos, &quad, true);
->>>>>>> Practica 3 arreglo includes
+
 
 	while (!glfwWindowShouldClose(pWindow) && time < 20)
 	{
@@ -140,11 +116,8 @@ int main()
 		lgfx_clearcolorbuffer(0.f, 0.f, 0.f);
 		
 		lgfx_setblend(BLEND_ALPHA);
-<<<<<<< HEAD
-		ltex_drawrotsized(temp->memorytexture, xpos, ypos, 0, 0, 0, 200, 200, quad.s0,quad.t0,quad.s1,quad.t1);
-=======
+
 		ltex_drawrotsized(font->memorytexture, xpos, ypos, 0, 0, 0, 200, 200, quad.s0,quad.t0,quad.s1,quad.t1);
->>>>>>> Practica 3 arreglo includes
 		
 		time = glfwGetTime();
 
