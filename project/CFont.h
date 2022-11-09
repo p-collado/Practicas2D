@@ -8,19 +8,18 @@
 class cFont
 {
 public:
-
-	static ltex_t* memorytexture;
-	static FILE* pFile;
-	static unsigned char* colorbuffer;
-	static unsigned char* pixels;
+	
 	float height;
-	static stbtt_bakedchar* data;
-	static cFont* load(const char* _filename, float height, float _r);
+	ltex_t* memorytexture;
+	FILE* pFile;
+	stbtt_bakedchar* data;
+	static cFont* load(const char* _filename, float height, float _r, float _g, float _b);
 	float getHeight() const;
 	Vec2  getTextSize(const char* _text) const;
 	void draw(const char* _text, const Vec2& _pos) const;
+	~cFont();
 
 private:
-	cFont();
+	cFont(ltex_t* _texture, stbtt_bakedchar* data, FILE* _file, float height);
 };
 

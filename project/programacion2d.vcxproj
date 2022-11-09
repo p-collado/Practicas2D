@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="CFont.cpp" />
+    <ClCompile Include="InstanceWord.cpp" />
     <ClCompile Include="Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -28,6 +29,7 @@
     <ClInclude Include="..\lib\stb_image.h" />
     <ClInclude Include="..\lib\stb_truetype.h" />
     <ClInclude Include="CFont.h" />
+    <ClInclude Include="InstanceWord.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
