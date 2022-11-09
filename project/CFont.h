@@ -1,10 +1,17 @@
-Vec2 vec;
+#pragma once
 
+<<<<<<< HEAD
 #define STB_TRUETYPE_IMPLEMENTATION
 
 #include<litegfx.h>
 #include <iostream>
 #include "stb_truetype.h"
+=======
+#include "litegfx.h"
+#include "stb_truetype.h"
+#include <iostream>
+#include "..\project\Vec2.h"
+>>>>>>> Practica 3 arreglo includes
 
 class cFont
 {
@@ -17,6 +24,7 @@ public:
 	float height;
 	static stbtt_bakedchar* data;
 
+<<<<<<< HEAD
 	static cFont* load(const char* _filename, float height, float _r)
 	{
 		cFont* temp = new cFont();
@@ -55,31 +63,14 @@ public:
 		return temp;
 	}
 
+=======
+	static cFont* load(const char* _filename, float height, float _r);
+>>>>>>> Practica 3 arreglo includes
 	float getHeight() const;
 	Vec2  getTextSize(const char* _text) const;
 	void draw(const char* _text, const Vec2& _pos) const;
-	static cFont contruirCFont()
-	{
-		return cFont::cFont();
-	}
 
-
-	~cFont();
 private:
 	cFont();
-	
 };
 
-cFont::cFont()
-{
-	height = 1024;
-	memorytexture = nullptr;
-	pFile = nullptr;
-	colorbuffer = nullptr;
-	pixels = nullptr;
-	data = nullptr;
-}
-
-cFont::~cFont()
-{
-}

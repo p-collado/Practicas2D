@@ -26,20 +26,20 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vec2.h">
+    <ClInclude Include="CFont.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\lib\litegfx.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lib\stb_image.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\lib\stb_truetype.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CFont.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\lib\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
