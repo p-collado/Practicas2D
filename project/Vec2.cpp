@@ -33,9 +33,19 @@ Vec2 Vec2::operator+(Vec2& _vec) const
   return *(new Vec2(fx + _vec.GetfX(), fy + _vec.GetfY()));
 }
 
+Vec2 Vec2::operator+(const Vec2& _vec) const
+{
+  return *(new Vec2(fx + _vec.GetfX(), fy + _vec.GetfY()));
+}
+
 Vec2 Vec2::operator*(Vec2& _vec) const
 {
   return *(new Vec2(fx * _vec.GetfX(), fy * _vec.GetfY()));
+}
+
+Vec2 Vec2::operator*(float _a) const
+{
+  return *(new Vec2(this->fx*_a,this->fy*_a));
 }
 
 Vec2 Vec2::operator/(Vec2& _vec) const
@@ -46,6 +56,11 @@ Vec2 Vec2::operator/(Vec2& _vec) const
 Vec2 Vec2::operator-(Vec2& _vec) const
 {
   return *(new Vec2 (fx - _vec.GetfX(), fy - _vec.GetfY()));
+}
+
+Vec2 Vec2::operator-(const Vec2& _vec) const
+{
+  return *(new Vec2(fx - _vec.GetfX(), fy - _vec.GetfY()));
 }
 
 Vec2 Vec2::ValorAbsoluto() const

@@ -21,10 +21,7 @@
     <ClCompile Include="Vec2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CFont.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InstanceWord.cpp">
+    <ClCompile Include="CSprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,11 +38,8 @@
     <ClInclude Include="..\lib\stb_truetype.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="CFont.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InstanceWord.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="CSprite.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
