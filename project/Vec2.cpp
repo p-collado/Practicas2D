@@ -63,6 +63,16 @@ Vec2 Vec2::operator-(const Vec2& _vec) const
   return *(new Vec2(fx - _vec.GetfX(), fy - _vec.GetfY()));
 }
 
+bool Vec2::operator==(Vec2& _vec) const
+{
+  return (fx == _vec.GetfX() && fy == _vec.GetfY());
+}
+
+bool Vec2::operator==(const Vec2& _vec) const
+{
+  return (fx == _vec.GetfX() && fy == _vec.GetfY());
+}
+
 Vec2 Vec2::ValorAbsoluto() const
 {
   Vec2 Temp;

@@ -4,7 +4,7 @@
 #include "stb_image.h"
 #include "..\project\Vec2.h"
 
-//typedef void (*CallbackFunc)(CSprite& _sprite, float _delta);
+//typedef void (*CallbackFunc)(CSprite& _sprite, float _delta); //COMO USAR ESTO
 
 
 class CSprite
@@ -15,8 +15,6 @@ class CSprite
 	float alpha;
 	lblend_t mode;
 	ltex_t* memorytexture;
-	FILE* pFile;  //SE USAN??
-	//stbtt_bakedchar* data; //SE USAN??
 	float angle;
 	int vframes;
 	int hframes;
@@ -25,15 +23,16 @@ class CSprite
 	Vec2 pivot;
 	int fps;
 	float counterTime;
+	float maxRot;
 
 	CSprite(const ltex_t* tex, int hframes, int vframes, lblend_t _mode);
 
 public:
-	int currentframe;
+	 int currentframe;
 	 static CSprite* loadTexture(const char* filename);
 	~CSprite();
-	//void setCallback(CallbackFunc func);
-	void* getUserData(); 
+	//void setCallback(CallbackFunc func); //COMO USAR ESTO???
+	void* getUserData(); //ESTO QUE ES???
 	void setUserData(void* data);
 	const ltex_t* getTexture() const;
 	void setTexture(const ltex_t* tex, int hframes = 1, int vframes = 1);
@@ -61,5 +60,7 @@ public:
 	void setCurrentFrame(int frame);
 	void update(float _deltaTime); 
 	void draw() const;
+	void setMaxRot(float _maxrot);
+	const float getMaxRot();
 };
 

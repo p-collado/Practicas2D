@@ -22,6 +22,8 @@ public:
   Vec2 operator/(Vec2& _vec) const;
   Vec2 operator-(Vec2& _vec) const;
   Vec2 operator-(const Vec2& _vec) const;
+  bool operator==(Vec2& _vec) const;
+  bool operator==(const Vec2& _vec) const;
   Vec2 ValorAbsoluto() const;
   float Longitud() const ;
   double ProductoEscalar(Vec2* _vec1) const;

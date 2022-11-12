@@ -2,21 +2,25 @@
 #include "..\project\Vec2.h"
 #include <iostream>
 
-CSprite::CSprite(const ltex_t* tex, int hframes = 1, int vframes = 1, lblend_t _mode = lblend_t::BLEND_ALPHA)
+CSprite::CSprite(const ltex_t* tex, int _hframes = 1, int _vframes = 1, lblend_t _mode = lblend_t::BLEND_ALPHA)
 {
   memorytexture = new ltex_t(*(tex));
-  this->hframes = hframes;
-  this->vframes = vframes;
-  this->mode = _mode;
-  this->fps = 0;
-  this->counterTime = 0.f;
+  hframes = _hframes;
+  vframes = _vframes;
+  mode = _mode;
+  fps = 0;
+  counterTime = 0.f;
+  currentframe = 0;
+  maxRot = 0.f;
+  scale.SetfX(1.f); 
+  scale.SetfY(1.f);
+  pivot.SetfX(0.5);
+  pivot.SetfY(0.5);
 }
 
 CSprite::~CSprite()
 {
   delete[] memorytexture;
-  delete[] pFile;
-  //delete[] data;
   delete &pos;
   delete &scale;
   delete &pivot;
@@ -139,12 +143,21 @@ void CSprite::setFps(int fps)
 
 void CSprite::draw() const
 {
-  float u0 = 1/hframes * currentframe;
-  printf("%f, %d\n", u0, currentframe);
-  float u1 = u0 + (1 / hframes);
-  float v0 = (1 / hframes) * currentframe;
-  float v1 = v0 + (1 / hframes);
-  ltex_drawrotsized(memorytexture, pos.GetfX(), pos.GetfY(), angle,pivot.GetfX(),pivot.GetfY(),memorytexture->width/8,memorytexture->height,u0,0, u1 + 0.125,1);
+  float u0 = (1.f/hframes) * currentframe; //LOGICA DE ESTO
+  float u1 = u0 + (1.f / hframes);
+  float v0 = vframes - 1;
+  float v1 = vframes;
+  ltex_drawrotsized(memorytexture, pos.GetfX(), pos.GetfY(), angle,pivot.GetfX(), pivot.GetfY(), memorytexture->width / hframes * scale.GetfX(), memorytexture->height / vframes * scale.GetfY(), u0, v0, u1, v1);
+}
+
+void CSprite::setMaxRot(float _maxrot)
+{
+  maxRot = _maxrot;
+}
+
+const float CSprite::getMaxRot()
+{
+  return maxRot;
 }
 
 CSprite* CSprite::loadTexture(const char* filename)
@@ -155,8 +168,6 @@ CSprite* CSprite::loadTexture(const char* filename)
   int alto;
   int comp;
   unsigned char* _Buffer;
-
-  
  
   _Buffer = stbi_load(filename, &ancho, &alto, &comp, 4);
   mem = ltex_alloc(ancho, alto, 0);
@@ -169,21 +180,16 @@ CSprite* CSprite::loadTexture(const char* filename)
 void CSprite::update(float deltaTime) 
 {
   counterTime += deltaTime;
-
-  if (counterTime > (1 / 8))
+  if (counterTime >= (1.f / 8))
   {
     currentframe = (currentframe + 1) % 8;
     counterTime = 0;
   }
-
   draw();
 }
 
 void CSprite::setCurrentFrame(int frame) 
 {
-
-
-
   currentframe = frame;
 }
 
