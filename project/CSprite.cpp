@@ -16,6 +16,11 @@ CSprite::CSprite(const ltex_t* tex, int _hframes = 1, int _vframes = 1, lblend_t
   scale.SetfY(1.f);
   pivot.SetfX(0.5);
   pivot.SetfY(0.5);
+  red = 1.f;
+  green = 1.f;
+  blue = 1.f;
+  alpha = 1.f;
+  angle = 0;
 }
 
 CSprite::~CSprite()
