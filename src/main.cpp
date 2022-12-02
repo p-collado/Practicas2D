@@ -43,7 +43,7 @@ int main()
 	
 	lgfx_setup2d(WIDTH, HEIGHT);
 
-	CSprite* abeja = CSprite::loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\sprites\\bee_anim.png");
+	CSprite* abeja = CSprite::loadTexture("sprites\\bee_anim.png");
 	abeja->setFps(8);
 	abeja->setMaxRot(-15);
 	Vec2 Cursor(x, y);
