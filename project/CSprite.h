@@ -4,11 +4,9 @@
 #include "stb_image.h"
 #include "..\project\Vec2.h"
 
-//typedef void (*CallbackFunc)(CSprite& _sprite, float _delta); //COMO USAR ESTO
-
-
 class CSprite
 { private:
+
 	float red;
 	float blue;
 	float green;
@@ -24,15 +22,18 @@ class CSprite
 	int fps;
 	float counterTime;
 	float maxRot;
-
 	CSprite(const ltex_t* tex, int hframes, int vframes, lblend_t _mode);
 
 public:
+
+	void* data;
+	typedef void (*CallbackFunc)(CSprite& _sprite, float _delta);
+	CallbackFunc behaviour;
 	 int currentframe;
 	 static CSprite* loadTexture(const char* filename);
 	~CSprite();
-	//void setCallback(CallbackFunc func); //COMO USAR ESTO???
-	void* getUserData(); //ESTO QUE ES???
+	void setCallback(CallbackFunc func);
+	void* getUserData();
 	void setUserData(void* data);
 	const ltex_t* getTexture() const;
 	void setTexture(const ltex_t* tex, int hframes = 1, int vframes = 1);

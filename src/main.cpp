@@ -1,30 +1,33 @@
 #define LITE_GFX_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #include "..\project\CSprite.h"
-//#include "litegfx.h"
 #include <glfw3.h>
-//#include"stb_image.h"
 #include "..\project\Vec2.h"
 #include <math.h>
-
-
 
 #define HEIGHT 720
 #define WIDTH 1280
 
 using namespace std;
 
-//template <typename T> std::string stringFromNumber(T val)
-//{
-//	std::ostringstream stream; 
-//	stream << std::fixed << val; 
-//	return stream.str();
-//}
-
-//ltex_t* loadTexture(const char* filename);
-
 float xpos;
 float ypos;
+
+void SeekingMouse(CSprite& _Sprite, float _delta)
+{
+	Vec2 Distance;
+	Vec2 Cursor = *(static_cast<Vec2*>(_Sprite.getUserData()));
+
+	Distance = Cursor - _Sprite.getPosition();
+	if (!(Distance.GetfX() == 0.f && Distance.GetfY() == 0))
+	{
+		Distance = Cursor.Normalvector(Distance);
+		Vec2 NewPos = Distance * 128.f * _delta;
+		NewPos = NewPos + _Sprite.getPosition();
+		_Sprite.setPosition(NewPos);
+	}
+}
+
 int main() 
 {
 	if (!glfwInit())
@@ -40,17 +43,17 @@ int main()
 	
 	lgfx_setup2d(WIDTH, HEIGHT);
 
-	CSprite* abeja = CSprite::loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\programacion2d\\sprites\\bee_anim.png");
+	CSprite* abeja = CSprite::loadTexture("C:\\Users\\pedro\\source\\repos\\p-collado\\PracticasJavier.Alegre\\sprites\\bee_anim.png");
 	abeja->setFps(8);
 	abeja->setMaxRot(-15);
 	Vec2 Cursor(x, y);
 	Vec2 Distance;
 
-
 	float angle = 0.f;
 	double time = 0.f;
 	double deltaTime = 0;
 	float resta = 0.f;
+
 	while (!glfwWindowShouldClose(pWindow))
 	{
 		deltaTime = glfwGetTime() - time;
@@ -58,15 +61,10 @@ int main()
 		glfwPollEvents();
 		glfwGetCursorPos(pWindow,&x , &y);
 
-
 		//Seek mouse and bee Movement
 		Cursor = Vec2(x,y);
-		Distance = Cursor - abeja->getPosition();
-		Distance = Cursor.Normalvector(Distance);
-		Vec2 NewPos = Distance * 128.f * deltaTime;
-		NewPos = NewPos + abeja->getPosition();
-		abeja->setPosition(NewPos);
-
+		abeja->setUserData(&Cursor);
+		abeja->setCallback(&SeekingMouse);
 
 		//Rotation
 		if (angle > abeja->getMaxRot())
@@ -87,15 +85,16 @@ int main()
 			}
 		}
 
-
 		//Flip logic
-		if (Cursor.GetfX()<abeja->getPosition().GetfX() - 1)//DUDA:se raya cuando el numero son casi iguales, DUDA, FLIP Y ROTACION
+		if (Cursor.GetfX()<=abeja->getPosition().GetfX() && abeja->getScale().GetfX() != -1)
 		{
-			abeja->setScale(Vec2(-1.f,1.f));
+			if(abeja->getPosition().GetfX() - Cursor.GetfX() >= 1)
+					abeja->setScale(Vec2(-1.f,1.f));
 		}
-		if(Cursor.GetfX() > abeja->getPosition().GetfX() - 1)
+		else if(Cursor.GetfX() > abeja->getPosition().GetfX() && abeja->getScale().GetfX() != 1 )
 		{
-			abeja->setScale(Vec2(1.f, 1.f));
+			if ( Cursor.GetfX() - abeja->getPosition().GetfX() >= 1)
+						abeja->setScale(Vec2(1.f, 1.f));
 		}
 
 		//Idle Logic
@@ -129,5 +128,6 @@ int main()
 	}
 
 	void glfwTerminate();
+
 	return 0;
 }

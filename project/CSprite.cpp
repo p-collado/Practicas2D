@@ -148,7 +148,7 @@ void CSprite::setFps(int fps)
 
 void CSprite::draw() const
 {
-  float u0 = (1.f/hframes) * currentframe; //LOGICA DE ESTO
+  float u0 = (1.f/hframes) * currentframe;
   float u1 = u0 + (1.f / hframes);
   float v0 = vframes - 1;
   float v1 = vframes;
@@ -184,6 +184,7 @@ CSprite* CSprite::loadTexture(const char* filename)
 
 void CSprite::update(float deltaTime) 
 {
+  behaviour(*this, deltaTime);
   counterTime += deltaTime;
   if (counterTime >= (1.f / 8))
   {
@@ -201,4 +202,19 @@ void CSprite::setCurrentFrame(int frame)
 float CSprite::getCurrentFrame() const
 {
   return currentframe;
+}
+
+void 	CSprite::setCallback(CallbackFunc func)
+{
+  behaviour = func;
+}
+
+void* CSprite::getUserData() 
+{
+  return data;
+}
+
+void CSprite::setUserData(void* data)
+{
+  this->data = data;
 }
