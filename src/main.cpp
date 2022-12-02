@@ -66,53 +66,6 @@ int main()
 		abeja->setUserData(&Cursor);
 		abeja->setCallback(&SeekingMouse);
 
-		//Rotation
-		if (angle > abeja->getMaxRot())
-		{
-			if (Cursor.GetfX() > abeja->getPosition().GetfX())
-			{
-				angle -= 32 * deltaTime;
-				abeja->setAngle(angle);
-			}
-		}
-
-		if (angle < (abeja->getMaxRot())*-1)
-		{
-			if (Cursor.GetfX() < abeja->getPosition().GetfX())
-			{
-				angle += 32 * deltaTime;
-				abeja->setAngle(angle);
-			}
-		}
-
-		//Flip logic
-		if (Cursor.GetfX()<=abeja->getPosition().GetfX() && abeja->getScale().GetfX() != -1)
-		{
-			if(abeja->getPosition().GetfX() - Cursor.GetfX() >= 1)
-					abeja->setScale(Vec2(-1.f,1.f));
-		}
-		else if(Cursor.GetfX() > abeja->getPosition().GetfX() && abeja->getScale().GetfX() != 1 )
-		{
-			if ( Cursor.GetfX() - abeja->getPosition().GetfX() >= 1)
-						abeja->setScale(Vec2(1.f, 1.f));
-		}
-
-		//Idle Logic
-		if (fabs(Cursor.GetfX() - abeja->getPosition().GetfX()) < 1)
-		{
-			if(abeja->getAngle() < 0)
-			{
-				angle += 32 * deltaTime;
-				abeja->setAngle(angle);
-			}
-
-			if (abeja->getAngle() > 0)
-			{
-				angle -= 32 * deltaTime;
-				abeja->setAngle(angle);
-			}
-		}
-
 		xpos = Cursor.GetfX();
 		ypos = Cursor.GetfY();
 	

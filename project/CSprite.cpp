@@ -191,6 +191,53 @@ void CSprite::update(float deltaTime)
     currentframe = (currentframe + 1) % 8;
     counterTime = 0;
   }
+
+  //Rotation
+  if (angle > this->getMaxRot())
+  {
+    if (static_cast<Vec2*>(data)->GetfX() > this->getPosition().GetfX())
+    {
+      angle -= 32 * deltaTime;
+      //this->setAngle(angle);
+    }
+  }
+
+  if (angle < (this->getMaxRot()) * -1)
+  {
+    if (static_cast<Vec2*>(data)->GetfX() < this->getPosition().GetfX())
+    {
+      angle += 32 * deltaTime;
+    }
+  }
+
+  //Flip logic
+  if (static_cast<Vec2*>(data)->GetfX() <= this->getPosition().GetfX() && this->getScale().GetfX() != -1)
+  {
+    if (this->getPosition().GetfX() - static_cast<Vec2*>(data)->GetfX() >= 1)
+      this->setScale(Vec2(-1.f, 1.f));
+  }
+  else if (static_cast<Vec2*>(data)->GetfX() > this->getPosition().GetfX() && this->getScale().GetfX() != 1)
+  {
+    if (static_cast<Vec2*>(data)->GetfX() - this->getPosition().GetfX() >= 1)
+      this->setScale(Vec2(1.f, 1.f));
+  }
+
+
+  //Idle Logic
+  if (fabs(static_cast<Vec2*>(data)->GetfX() - this->getPosition().GetfX()) < 1)
+  {
+    if (this->getAngle() < 0)
+    {
+      angle += 32 * deltaTime;
+    }
+
+    if (this->getAngle() > 0)
+    {
+      angle -= 32 * deltaTime;
+    }
+  }
+
+
   draw();
 }
 
