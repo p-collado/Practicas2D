@@ -3,10 +3,13 @@
 #include "litegfx.h"
 #include "stb_image.h"
 #include "..\project\Vec2.h"
+#include "CircleCollider.h"
 
 class CSprite
-{ private:
+{
+private:
 
+	uint8_t pixels;
 	float red;
 	float blue;
 	float green;
@@ -23,8 +26,17 @@ class CSprite
 	float counterTime;
 	float maxRot;
 	CSprite(const ltex_t* tex, int hframes, int vframes, lblend_t _mode);
+	//unsigned char* pixels;
+	AbsCollider* collider;
+	
 
 public:
+	enum CollisionType {
+		COLLISION_NONE,
+		COLLISION_CIRCLE,
+		COLLISION_RECT,
+		COLLISION_PIXELS
+	}collisiontypes;
 
 	void* data;
 	typedef void (*CallbackFunc)(CSprite& _sprite, float _delta);
@@ -63,5 +75,9 @@ public:
 	void draw() const;
 	void setMaxRot(float _maxrot);
 	const float getMaxRot();
+	void setCollisionType(CollisionType type);
+	CollisionType getCollisionType() const;
+	const AbsCollider* getCollider() const;
+	bool collides(const CSprite& other) const;
 };
 

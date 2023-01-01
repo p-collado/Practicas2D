@@ -20,14 +20,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="AbsCollider.cpp" />
+    <ClCompile Include="CircleCollider.cpp" />
     <ClCompile Include="CSprite.cpp" />
+    <ClCompile Include="PixelsCollider.cpp" />
+    <ClCompile Include="RectCollider.cpp" />
     <ClCompile Include="Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\lib\litegfx.h" />
     <ClInclude Include="..\lib\stb_image.h" />
     <ClInclude Include="..\lib\stb_truetype.h" />
+    <ClInclude Include="AbsCollider.h" />
+    <ClInclude Include="CircleCollider.h" />
     <ClInclude Include="CSprite.h" />
+    <ClInclude Include="PixelsCollider.h" />
+    <ClInclude Include="RectCollider.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

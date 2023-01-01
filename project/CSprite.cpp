@@ -1,6 +1,9 @@
 #include "CSprite.h"
 #include "..\project\Vec2.h"
 #include <iostream>
+#include "CircleCollider.h"
+#include "RectCollider.h"
+#include "PixelsCollider.h"
 
 CSprite::CSprite(const ltex_t* tex, int _hframes = 1, int _vframes = 1, lblend_t _mode = lblend_t::BLEND_ALPHA)
 {
@@ -88,6 +91,10 @@ const Vec2& CSprite::getPosition() const
 
 void CSprite::setPosition(const Vec2& pos)
 {
+  if (collider)
+  {
+    collider->setPositionCollider(pos);
+  }
   this->pos = *(new Vec2(pos.GetfX(),pos.GetfY()));
 }
 
@@ -165,6 +172,47 @@ const float CSprite::getMaxRot()
   return maxRot;
 }
 
+void CSprite::setCollisionType(CollisionType type)
+{
+
+  float radius = 0.f;
+
+  switch (type)
+  {
+  case CSprite::COLLISION_NONE:
+    break;
+  case CSprite::COLLISION_CIRCLE:
+    collisiontypes = COLLISION_CIRCLE;
+    radius=sqrt(((memorytexture->width / 2) * (memorytexture->width / 2)) + ((memorytexture->height / 2) * (memorytexture->height / 2)));
+    //if (memorytexture->width >= memorytexture->height)
+    //  radius = memorytexture->width;
+    //if(memorytexture->width < memorytexture->height)
+    //  radius = memorytexture->height;
+
+    collider = new CircleCollider(pos,radius);
+    break;
+  case CSprite::COLLISION_RECT:
+    collisiontypes = COLLISION_RECT;
+    collider = new RectCollider(pos, Vec2(memorytexture->width, memorytexture->height));
+
+    break;
+  case CSprite::COLLISION_PIXELS:
+    break;
+  default:
+    break;
+  }
+}
+
+CSprite::CollisionType CSprite::getCollisionType() const
+{
+  return collisiontypes;
+}
+
+const AbsCollider* CSprite::getCollider() const
+{
+  return collider;
+}
+
 CSprite* CSprite::loadTexture(const char* filename)
 {
   ltex_t* mem;
@@ -177,7 +225,7 @@ CSprite* CSprite::loadTexture(const char* filename)
   _Buffer = stbi_load(filename, &ancho, &alto, &comp, 4);
   mem = ltex_alloc(ancho, alto, 0);
   ltex_setpixels(mem, _Buffer);
-  CSprite* temp = new CSprite(mem, 8, 1, lblend_t::BLEND_ALPHA);
+  CSprite* temp = new CSprite(mem, 1, 1, lblend_t::BLEND_ALPHA);
 
   return temp;
 }

@@ -28,13 +28,16 @@ int main()
 	
 	lgfx_setup2d(WIDTH, HEIGHT);
 
-	CSprite* abeja = CSprite::loadTexture("sprites\\bee_anim.png");
+	CSprite* bee = CSprite::loadTexture("sprites\\ball.png");
+	bee->setCollisionType(CSprite::COLLISION_CIRCLE);
+	CSprite* ball = CSprite::loadTexture("sprites\\box.png");
+	ball->setCollisionType(CSprite::COLLISION_RECT);
+	CSprite* box = CSprite::loadTexture("sprites\\box.png");
 	Vec2 Cursor(x, y);
 	Vec2 Distance;
 
 	double time = 0.f;
 	double deltaTime = 0;
-
 
 	while (!glfwWindowShouldClose(pWindow))
 	{
@@ -51,6 +54,14 @@ int main()
 		/* Render here */
 		lgfx_clearcolorbuffer(0.f, 0.f, 0.f);
 		lgfx_setblend(BLEND_ALPHA);
+
+		bee->setPosition(Vec2(200,400));
+		ball->setPosition(Cursor);
+
+		bee->draw();
+		ball->draw();
+
+		printf("%d\n",bee->getCollider()->collides(*(ball->getCollider())));
 
 
 		time = glfwGetTime();
