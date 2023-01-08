@@ -25,42 +25,57 @@ void Vec2::SetfY(float _y)
 
 Vec2 Vec2::operator=(Vec2& _vec) 
 {
-  return *(new Vec2(fx = _vec.GetfX(), fy = _vec.GetfY()));
+  return Vec2(fx = _vec.GetfX(), fy = _vec.GetfY());
 }
 
 Vec2 Vec2::operator+(Vec2& _vec) const
 {
-  return *(new Vec2(fx + _vec.GetfX(), fy + _vec.GetfY()));
+  return Vec2(fx + _vec.GetfX(), fy + _vec.GetfY());
+}
+
+Vec2 Vec2::operator+(float add)
+{
+  return Vec2 (fx + add, fy + add);
 }
 
 Vec2 Vec2::operator+(const Vec2& _vec) const
 {
-  return *(new Vec2(fx + _vec.GetfX(), fy + _vec.GetfY()));
+  return Vec2(fx + _vec.GetfX(), fy + _vec.GetfY());
 }
 
 Vec2 Vec2::operator*(Vec2& _vec) const
 {
-  return *(new Vec2(fx * _vec.GetfX(), fy * _vec.GetfY()));
+  return Vec2(fx * _vec.GetfX(), fy * _vec.GetfY());
 }
 
 Vec2 Vec2::operator*(float _a) const
 {
-  return *(new Vec2(this->fx*_a,this->fy*_a));
+  return Vec2(this->fx * _a, this->fy * _a);
 }
 
 Vec2 Vec2::operator/(Vec2& _vec) const
 {
-  return *(new Vec2(fx / _vec.GetfX(), fy / _vec.GetfY()));
+  return Vec2(fx / _vec.GetfX(), fy / _vec.GetfY());
+}
+
+Vec2 Vec2::operator/(int div) const
+{
+  return Vec2(fx / div, fy / div);
+}
+
+Vec2 Vec2::operator/(float div) const
+{
+  return Vec2(fx / div, fy / div);
 }
 
 Vec2 Vec2::operator-(Vec2& _vec) const
 {
-  return *(new Vec2 (fx - _vec.GetfX(), fy - _vec.GetfY()));
+  return Vec2(fx - _vec.GetfX(), fy - _vec.GetfY());
 }
 
 Vec2 Vec2::operator-(const Vec2& _vec) const
 {
-  return *(new Vec2(fx - _vec.GetfX(), fy - _vec.GetfY()));
+  return Vec2(fx - _vec.GetfX(), fy - _vec.GetfY());
 }
 
 bool Vec2::operator==(Vec2& _vec) const
@@ -87,7 +102,7 @@ Vec2 Vec2::ValorAbsoluto() const
     Temp.SetfY(fy * -1);
   }
 
-  return *(new Vec2(Temp.GetfX(), Temp.GetfY()));
+  return Vec2(Temp.GetfX(), Temp.GetfY());
 
 }
 
@@ -107,7 +122,7 @@ double Vec2::ProductoEscalar(Vec2* _Other) const
 
 Vec2 Vec2::Normalvector(Vec2 _vec) const
 {
-  return *(new Vec2(_vec.fx / _vec.Longitud(), _vec.fy / _vec.Longitud()));
+  return Vec2(_vec.fx / _vec.Longitud(), _vec.fy / _vec.Longitud());
 }
 
 float Vec2::Angle(Vec2 &other) const

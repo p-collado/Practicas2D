@@ -5,9 +5,11 @@
 #include "RectCollider.h"
 #include "PixelsCollider.h"
 
-CSprite::CSprite(const ltex_t* tex, int _hframes = 1, int _vframes = 1, lblend_t _mode = lblend_t::BLEND_ALPHA)
+CSprite::CSprite(const ltex_t* tex, uint8_t* _pixels, int _hframes = 1, int _vframes = 1, lblend_t _mode = lblend_t::BLEND_ALPHA)
 {
+  escalado = 0.25f;
   memorytexture = new ltex_t(*(tex));
+  pixels = _pixels;
   hframes = _hframes;
   vframes = _vframes;
   mode = _mode;
@@ -17,21 +19,21 @@ CSprite::CSprite(const ltex_t* tex, int _hframes = 1, int _vframes = 1, lblend_t
   maxRot = 0.f;
   scale.SetfX(1.f); 
   scale.SetfY(1.f);
-  pivot.SetfX(0.5);
-  pivot.SetfY(0.5);
+  pivot.SetfX(0.0);
+  pivot.SetfY(0.0);
   red = 1.f;
   green = 1.f;
   blue = 1.f;
   alpha = 1.f;
   angle = 0;
+  size = Vec2(memorytexture->width, memorytexture->height);
 }
 
 CSprite::~CSprite()
 {
   delete[] memorytexture;
-  delete &pos;
-  delete &scale;
-  delete &pivot;
+  delete[] pixels;
+  delete collider;
 }
 
 const ltex_t* CSprite::getTexture() const
@@ -41,6 +43,11 @@ const ltex_t* CSprite::getTexture() const
 
 void CSprite::setTexture(const ltex_t* tex, int hframes, int vframes)
 {
+  if (memorytexture)
+  {
+    delete[] memorytexture;
+  }
+
   memorytexture = new ltex_t(*(tex));
   this->hframes = hframes;
   this->vframes = vframes;
@@ -89,13 +96,13 @@ const Vec2& CSprite::getPosition() const
   return pos;
 }
 
-void CSprite::setPosition(const Vec2& pos)
+void CSprite::setPosition(const Vec2& _pos)
 {
   if (collider)
   {
-    collider->setPositionCollider(pos);
+    collider->setPositionCollider(_pos - (pivot * Vec2(memorytexture->width, memorytexture->height)));
   }
-  this->pos = *(new Vec2(pos.GetfX(),pos.GetfY()));
+  pos = Vec2(_pos.GetfX(), _pos.GetfY());
 }
 
 float CSprite::getAngle() const
@@ -115,12 +122,12 @@ const Vec2& CSprite::getScale() const
 
 void CSprite::setScale(const Vec2& scale)
 {
-  this->scale = *(new Vec2 (scale.GetfX(), scale.GetfY()));
+  this->scale = Vec2(scale.GetfX(), scale.GetfY());
 }
 
 Vec2 CSprite::getSize() const
 {
-  return *(new Vec2(hframes * scale.GetfX(), vframes * scale.GetfY()));
+  return Vec2(hframes * scale.GetfX(), vframes * scale.GetfY());
 }
 
 const Vec2& CSprite::getPivot() const
@@ -130,7 +137,7 @@ const Vec2& CSprite::getPivot() const
 
 void CSprite::setPivot(const Vec2& pivot)
 {
-  this->pivot = *(new Vec2(pivot.GetfX(), pivot.GetfY()));
+  this->pivot = Vec2(pivot.GetfX(), pivot.GetfY());
 }
 
 int CSprite::getHframes() const
@@ -159,7 +166,8 @@ void CSprite::draw() const
   float u1 = u0 + (1.f / hframes);
   float v0 = vframes - 1;
   float v1 = vframes;
-  ltex_drawrotsized(memorytexture, pos.GetfX(), pos.GetfY(), angle,pivot.GetfX(), pivot.GetfY(), memorytexture->width / hframes * scale.GetfX(), memorytexture->height / vframes * scale.GetfY(), u0, v0, u1, v1);
+  ltex_drawrotsized(memorytexture, pos.GetfX(), pos.GetfY(), angle, pivot.GetfX(), pivot.GetfY(), memorytexture->width / hframes * scale.GetfX(), memorytexture->height / vframes * scale.GetfY(), u0, v0, u1, v1);
+
 }
 
 void CSprite::setMaxRot(float _maxrot)
@@ -181,23 +189,23 @@ void CSprite::setCollisionType(CollisionType type)
   {
   case CSprite::COLLISION_NONE:
     break;
+
   case CSprite::COLLISION_CIRCLE:
     collisiontypes = COLLISION_CIRCLE;
-    radius=sqrt(((memorytexture->width / 2) * (memorytexture->width / 2)) + ((memorytexture->height / 2) * (memorytexture->height / 2)));
-    //if (memorytexture->width >= memorytexture->height)
-    //  radius = memorytexture->width;
-    //if(memorytexture->width < memorytexture->height)
-    //  radius = memorytexture->height;
-
-    collider = new CircleCollider(pos,radius);
+    radius= memorytexture-> width / 2;
+    collider = new CircleCollider(pos - (pivot * Vec2(memorytexture->width, memorytexture->height)), radius);
     break;
+
   case CSprite::COLLISION_RECT:
     collisiontypes = COLLISION_RECT;
-    collider = new RectCollider(pos, Vec2(memorytexture->width, memorytexture->height));
+    collider = new RectCollider(pos - (pivot * Vec2(memorytexture->width, memorytexture->height)), Vec2(memorytexture->width, memorytexture->height));
+    break;
 
-    break;
   case CSprite::COLLISION_PIXELS:
+    collisiontypes = COLLISION_PIXELS;
+    collider = new PixelsCollider(pos - (pivot * Vec2(memorytexture->width, memorytexture->height)), Vec2(memorytexture->width, memorytexture->height), pixels);
     break;
+
   default:
     break;
   }
@@ -213,6 +221,11 @@ const AbsCollider* CSprite::getCollider() const
   return collider;
 }
 
+bool CSprite::collides(const CSprite& other) const
+{
+  return collider->collides(*(other.getCollider()));
+}
+
 CSprite* CSprite::loadTexture(const char* filename)
 {
   ltex_t* mem;
@@ -224,68 +237,19 @@ CSprite* CSprite::loadTexture(const char* filename)
  
   _Buffer = stbi_load(filename, &ancho, &alto, &comp, 4);
   mem = ltex_alloc(ancho, alto, 0);
-  ltex_setpixels(mem, _Buffer);
-  CSprite* temp = new CSprite(mem, 1, 1, lblend_t::BLEND_ALPHA);
 
-  return temp;
+  uint8_t* pixels = new uint8_t[4 * ancho * alto];
+
+  ltex_setpixels(mem, _Buffer);
+  ltex_getpixels(mem, pixels);
+
+  return new CSprite(mem, pixels, 1, 1, lblend_t::BLEND_ALPHA);
 }
 
 void CSprite::update(float deltaTime) 
 {
-  behaviour(*this, deltaTime);
-  counterTime += deltaTime;
-  if (counterTime >= (1.f / 8))
-  {
-    currentframe = (currentframe + 1) % 8;
-    counterTime = 0;
-  }
-
-  //Rotation
-  if (angle > this->getMaxRot())
-  {
-    if (static_cast<Vec2*>(data)->GetfX() > this->getPosition().GetfX())
-    {
-      angle -= 32 * deltaTime;
-      //this->setAngle(angle);
-    }
-  }
-
-  if (angle < (this->getMaxRot()) * -1)
-  {
-    if (static_cast<Vec2*>(data)->GetfX() < this->getPosition().GetfX())
-    {
-      angle += 32 * deltaTime;
-    }
-  }
-
-  //Flip logic
-  if (static_cast<Vec2*>(data)->GetfX() <= this->getPosition().GetfX() && this->getScale().GetfX() != -1)
-  {
-    if (this->getPosition().GetfX() - static_cast<Vec2*>(data)->GetfX() >= 1)
-      this->setScale(Vec2(-1.f, 1.f));
-  }
-  else if (static_cast<Vec2*>(data)->GetfX() > this->getPosition().GetfX() && this->getScale().GetfX() != 1)
-  {
-    if (static_cast<Vec2*>(data)->GetfX() - this->getPosition().GetfX() >= 1)
-      this->setScale(Vec2(1.f, 1.f));
-  }
-
-
-  //Idle Logic
-  if (fabs(static_cast<Vec2*>(data)->GetfX() - this->getPosition().GetfX()) < 1)
-  {
-    if (this->getAngle() < 0)
-    {
-      angle += 32 * deltaTime;
-    }
-
-    if (this->getAngle() > 0)
-    {
-      angle -= 32 * deltaTime;
-    }
-  }
-
-
+  behaviour(*this, &escalado ,deltaTime);
+ 
   draw();
 }
 

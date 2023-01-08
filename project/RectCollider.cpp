@@ -1,5 +1,10 @@
 #include "RectCollider.h"
 
+RectCollider::~RectCollider()
+{
+
+}
+
 RectCollider::RectCollider(Vec2 _pos, Vec2 _size)
 {
   pos = _pos;
@@ -28,7 +33,7 @@ bool RectCollider::collides(const Vec2& pixelsPos, const Vec2& pixelsSize, const
 
 void RectCollider::setPositionCollider(const Vec2& _pos)
 {
-  pos = *(new Vec2(_pos));
+  pos = Vec2(_pos);
 }
 
 Vec2 RectCollider::getPositionCollider()
@@ -38,7 +43,7 @@ Vec2 RectCollider::getPositionCollider()
 
 void RectCollider::setSize(Vec2 _size)
 {
-  size = *(new Vec2(_size));
+  size = Vec2(_size);
 }
 
 Vec2 RectCollider::getSize()

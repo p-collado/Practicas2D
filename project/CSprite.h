@@ -9,7 +9,8 @@ class CSprite
 {
 private:
 
-	uint8_t pixels;
+	double escalado;
+	uint8_t* pixels;
 	float red;
 	float blue;
 	float green;
@@ -19,14 +20,14 @@ private:
 	float angle;
 	int vframes;
 	int hframes;
+	Vec2 size;
 	Vec2 pos;
 	Vec2 scale;
 	Vec2 pivot;
 	int fps;
 	float counterTime;
 	float maxRot;
-	CSprite(const ltex_t* tex, int hframes, int vframes, lblend_t _mode);
-	//unsigned char* pixels;
+	CSprite(const ltex_t* tex, uint8_t* pixels, int hframes, int vframes, lblend_t _mode);
 	AbsCollider* collider;
 	
 
@@ -38,8 +39,9 @@ public:
 		COLLISION_PIXELS
 	}collisiontypes;
 
+
 	void* data;
-	typedef void (*CallbackFunc)(CSprite& _sprite, float _delta);
+	typedef void (*CallbackFunc)(CSprite& _sprite, double* _scale, double _delta);
 	CallbackFunc behaviour;
 	 int currentframe;
 	 static CSprite* loadTexture(const char* filename);

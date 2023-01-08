@@ -1,5 +1,10 @@
 #include "CircleCollider.h"
 
+CircleCollider::~CircleCollider()
+{
+  
+}
+
 CircleCollider::CircleCollider(Vec2 _pos, float _radius)
 {
   radius = _radius;
@@ -28,7 +33,7 @@ bool CircleCollider::collides(const Vec2& pixelsPos, const Vec2& pixelsSize, con
 
 void CircleCollider::setPositionCollider(const Vec2& _pos)
 {
-  pos = *(new Vec2( _pos));
+  pos = Vec2(_pos) + radius;
 }
 
 Vec2 CircleCollider::getPositionCollider()

@@ -16,10 +16,13 @@ public:
   void SetfY(float _y);
   Vec2 operator=(Vec2& _vec);
   Vec2 operator+(Vec2& _vec) const;
+  Vec2 operator+(float add);
   Vec2 operator+(const Vec2& _vec) const;
   Vec2 operator*(Vec2& _vec) const;
   Vec2 operator*(float _a) const;
   Vec2 operator/(Vec2& _vec) const;
+  Vec2 operator/(int div) const;
+  Vec2 operator/(float div) const;
   Vec2 operator-(Vec2& _vec) const;
   Vec2 operator-(const Vec2& _vec) const;
   bool operator==(Vec2& _vec) const;

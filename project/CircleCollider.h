@@ -9,6 +9,7 @@ private:
   Vec2 pos;
 
 public:
+  ~CircleCollider();
   CircleCollider(Vec2 pos, float radius);
   bool collides(const AbsCollider& other) const;
   bool collides(const Vec2& circlePos, float circleRadius) const;
