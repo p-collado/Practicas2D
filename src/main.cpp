@@ -3,8 +3,7 @@
 #include "..\project\CSprite.h"
 #include <glfw3.h>
 #include "..\project\Vec2.h"
-#include <math.h>
-#include <stdio.h>
+#include <cstdio>
 
 #define HEIGHT 720
 #define WIDTH 1280
@@ -26,7 +25,6 @@ void Scale(CSprite& _sprite, double* _scale, double _deltaTime)
 	}
 }
 
-
 int main() 
 {
 	if (!glfwInit())
@@ -34,8 +32,7 @@ int main()
 		printf("ERROR EN INICIALIZAR");
 		return -1;
 	}
-
-	double escalado = 0.f;
+	
 	double x = 0.f;
 	double y = 0.f;
 

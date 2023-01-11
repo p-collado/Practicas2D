@@ -7,6 +7,7 @@
 
 CSprite::CSprite(ltex_t* tex, uint8_t* _pixels, int _hframes = 1, int _vframes = 1, lblend_t _mode = lblend_t::BLEND_ALPHA)
 {
+  layer = 0;
   escalado = 0.25f;
   memorytexture = tex;
   pixels = _pixels;

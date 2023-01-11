@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\World.cpp" />
     <ClCompile Include="AbsCollider.cpp" />
     <ClCompile Include="CircleCollider.cpp" />
     <ClCompile Include="CSprite.cpp" />
@@ -31,6 +32,7 @@
     <ClInclude Include="..\lib\litegfx.h" />
     <ClInclude Include="..\lib\stb_image.h" />
     <ClInclude Include="..\lib\stb_truetype.h" />
+    <ClInclude Include="..\src\World.h" />
     <ClInclude Include="AbsCollider.h" />
     <ClInclude Include="CircleCollider.h" />
     <ClInclude Include="CSprite.h" />
