@@ -5,10 +5,10 @@
 #include "RectCollider.h"
 #include "PixelsCollider.h"
 
-CSprite::CSprite(const ltex_t* tex, uint8_t* _pixels, int _hframes = 1, int _vframes = 1, lblend_t _mode = lblend_t::BLEND_ALPHA)
+CSprite::CSprite(ltex_t* tex, uint8_t* _pixels, int _hframes = 1, int _vframes = 1, lblend_t _mode = lblend_t::BLEND_ALPHA)
 {
   escalado = 0.25f;
-  memorytexture = new ltex_t(*(tex));
+  memorytexture = tex;
   pixels = _pixels;
   hframes = _hframes;
   vframes = _vframes;
@@ -31,7 +31,7 @@ CSprite::CSprite(const ltex_t* tex, uint8_t* _pixels, int _hframes = 1, int _vfr
 
 CSprite::~CSprite()
 {
-  delete[] memorytexture;
+  ltex_free(memorytexture);
   delete[] pixels;
   delete collider;
 }
@@ -162,12 +162,12 @@ void CSprite::setFps(int fps)
 
 void CSprite::draw() const
 {
+  lgfx_setcolor(red, green, blue, alpha);
   float u0 = (1.f/hframes) * currentframe;
   float u1 = u0 + (1.f / hframes);
   float v0 = vframes - 1;
   float v1 = vframes;
   ltex_drawrotsized(memorytexture, pos.GetfX(), pos.GetfY(), angle, pivot.GetfX(), pivot.GetfY(), memorytexture->width / hframes * scale.GetfX(), memorytexture->height / vframes * scale.GetfY(), u0, v0, u1, v1);
-
 }
 
 void CSprite::setMaxRot(float _maxrot)
@@ -182,6 +182,11 @@ const float CSprite::getMaxRot()
 
 void CSprite::setCollisionType(CollisionType type)
 {
+
+  if (collider)
+  {
+    delete collider;
+  }
 
   float radius = 0.f;
 
@@ -241,6 +246,7 @@ CSprite* CSprite::loadTexture(const char* filename)
   uint8_t* pixels = new uint8_t[4 * ancho * alto];
 
   ltex_setpixels(mem, _Buffer);
+  stbi_image_free(_Buffer);
   ltex_getpixels(mem, pixels);
 
   return new CSprite(mem, pixels, 1, 1, lblend_t::BLEND_ALPHA);

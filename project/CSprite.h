@@ -27,7 +27,7 @@ private:
 	int fps;
 	float counterTime;
 	float maxRot;
-	CSprite(const ltex_t* tex, uint8_t* pixels, int hframes, int vframes, lblend_t _mode);
+	CSprite(ltex_t* tex, uint8_t* pixels, int hframes, int vframes, lblend_t _mode);
 	AbsCollider* collider;
 	
 

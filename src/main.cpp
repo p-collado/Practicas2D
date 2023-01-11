@@ -4,6 +4,7 @@
 #include <glfw3.h>
 #include "..\project\Vec2.h"
 #include <math.h>
+#include <stdio.h>
 
 #define HEIGHT 720
 #define WIDTH 1280
@@ -15,13 +16,15 @@ float ypos;
 
 void Scale(CSprite& _sprite, double* _scale, double _deltaTime)
 {
-	if (_sprite.getScale().GetfX() >  1.1 || _sprite.getScale().GetfX() < 0.9)
+	if (_deltaTime < 0.1) //delay
 	{
-		*_scale *= -1;
+		if (_sprite.getScale().GetfX() >  1.1 || _sprite.getScale().GetfX() < 0.9)
+		{
+			*_scale *= -1;
+		}
+		_sprite.setScale(Vec2(_sprite.getScale().GetfX() + (*(_scale) * _deltaTime), _sprite.getScale().GetfY() + (*(_scale) * _deltaTime)));
 	}
-	_sprite.setScale(Vec2(_sprite.getScale().GetfX() + (*(_scale) * _deltaTime), _sprite.getScale().GetfY() + (*(_scale) * _deltaTime)));
 }
-
 
 
 int main() 
@@ -101,20 +104,26 @@ int main()
 			circle->setCollisionType(CSprite::COLLISION_PIXELS);
 		}
 
-
-		if (glfwGetKey(pWindow, GLFW_KEY_H) == GLFW_PRESS)
+		if (ball->collides(*circle))
 		{
-			int a = 1;
+			ball->setColor(1, 0, 0, 0.2);
+			circle->setColor(1, 0, 0, 0.2);
 		}
-
-		if (box->collides(*circle) || ball->collides(*circle) || bee->collides(*circle))
+		else if (bee->collides(*circle))
 		{
-			lgfx_setcolor(1, 0, 0, 0.5);
+			bee->setColor(1, 0, 0, 0.2);
+			circle->setColor(1, 0, 0, 0.2);
+		} else if (box->collides(*circle))
+		{
+			box->setColor(1, 0, 0, 0.2);
+			circle->setColor(1, 0, 0, 0.2);
 		}
-
-		else 
+		else
 		{
-			lgfx_setcolor(1, 1, 1, 1);
+			ball->setColor(1, 1, 1, 1);
+			bee->setColor(1, 1, 1, 1);
+			box->setColor(1, 1, 1, 1);
+			circle->setColor(1, 1, 1, 1);
 		}
 
 		ball->update(deltaTime);
