@@ -4,6 +4,7 @@
 #include <glfw3.h>
 #include "..\project\Vec2.h"
 #include <cstdio>
+#include "World.h"
 
 #define HEIGHT 720
 #define WIDTH 1280
@@ -25,6 +26,13 @@ void Scale(CSprite& _sprite, double* _scale, double _deltaTime)
 	}
 }
 
+
+void BehaviourBee()
+{
+
+}
+
+
 int main() 
 {
 	if (!glfwInit())
@@ -42,22 +50,17 @@ int main()
 	
 	lgfx_setup2d(WIDTH, HEIGHT);
 	CSprite* bee = CSprite::loadTexture("..\\sprites\\bee.png");
+	CSprite* back1 = CSprite::loadTexture("..\\sprites\\level.png");
 	bee->setCollisionType(CSprite::COLLISION_PIXELS);
-	CSprite* ball = CSprite::loadTexture("..\\sprites\\ball.png");
-	ball->setCollisionType(CSprite::COLLISION_CIRCLE);
-	CSprite* box = CSprite::loadTexture("..\\sprites\\box.png");
-	box->setCollisionType(CSprite::COLLISION_RECT);
-	CSprite* circle = CSprite::loadTexture("..\\sprites\\circle.png");
-	circle->setCollisionType(CSprite::COLLISION_CIRCLE);
+	World world(0.15,0.15,0.15,back1->getTexture(),nullptr,nullptr,nullptr);
+	world.addSprite(*bee);
+	world.setScrollRatio(0, 1.f);
 
 	Vec2 Cursor(x, y);
 	Vec2 Distance;
 
 	double time = 0.f;
 	double deltaTime = 0;
-
-	ball->setCallback(&Scale);
-	box->setCallback(&Scale);
 
 	while (!glfwWindowShouldClose(pWindow))
 	{
@@ -67,6 +70,7 @@ int main()
 		glfwGetCursorPos(pWindow,&x , &y);
 
 		Cursor = Vec2(x,y);
+		world.setCameraPosition(Cursor);
 
 		xpos = Cursor.GetfX();
 		ypos = Cursor.GetfY();
@@ -75,58 +79,16 @@ int main()
 		lgfx_clearcolorbuffer(0.f, 0.f, 0.f);
 		lgfx_setblend(BLEND_ALPHA);
 
-		box->setPosition(Vec2(1000, HEIGHT / 2));
-		bee->setPosition(Vec2(WIDTH / 2 - 50, HEIGHT / 2));
-		ball->setPosition(Vec2(200, HEIGHT / 2));
-		circle->setPosition(Cursor);
+		bee->setPosition(Cursor);
 
-		if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-		{
-			delete circle;
-			circle = CSprite::loadTexture("..\\sprites\\circle.png");
-			circle->setCollisionType(CSprite::COLLISION_CIRCLE);
-		}
 
-		if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+		if (glfwGetKey(pWindow, GLFW_KEY_P))
 		{
-			delete circle;
-			circle = CSprite::loadTexture("..\\sprites\\rect.png");
-			circle->setCollisionType(CSprite::COLLISION_RECT);
+			int b = 0;
 		}
-
-		if (glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
-		{
-			delete circle;
-			circle = CSprite::loadTexture("..\\sprites\\bee.png");
-			circle->setCollisionType(CSprite::COLLISION_PIXELS);
-		}
-
-		if (ball->collides(*circle))
-		{
-			ball->setColor(1, 0, 0, 0.2);
-			circle->setColor(1, 0, 0, 0.2);
-		}
-		else if (bee->collides(*circle))
-		{
-			bee->setColor(1, 0, 0, 0.2);
-			circle->setColor(1, 0, 0, 0.2);
-		} else if (box->collides(*circle))
-		{
-			box->setColor(1, 0, 0, 0.2);
-			circle->setColor(1, 0, 0, 0.2);
-		}
-		else
-		{
-			ball->setColor(1, 1, 1, 1);
-			bee->setColor(1, 1, 1, 1);
-			box->setColor(1, 1, 1, 1);
-			circle->setColor(1, 1, 1, 1);
-		}
-
-		ball->update(deltaTime);
-		box->update(deltaTime);
-		bee->draw();
-		circle->draw();
+		world.draw(Vec2(WIDTH,HEIGHT));
+		world.update(deltaTime);
+		//bee->draw();
 
 		time = glfwGetTime();
 
