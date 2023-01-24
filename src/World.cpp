@@ -66,24 +66,32 @@ void World::removeSprite(CSprite& sprite)
 
 void World::draw(const Vec2& screenSize)
 {
-  int vx = 0;
-  int fx = 1;
   lgfx_clearcolorbuffer(clearRed, clearGreen, clearBlue);
-  ltex_drawrotsized(background[0], 0, 0, 0, 0, 0, screenSize.GetfX(), screenSize.GetfY(), 0, 0, 0.25, 1);
+  lgfx_setorigin(cameraPos.GetfX(), cameraPos.GetfY());
+
+  float ratiox = 0.f;
+  for (size_t i = 0; i < background.size(); i++)
+  {
+    ratiox = cameraPos.GetfX() / static_cast<float>(background[i]->width);
+    ltex_drawrotsized(background[i], cameraPos.GetfX(), 0, 0, 0, 0, screenSize.GetfX(), screenSize.GetfY(), ratiox, 0, ratiox + 0.25, 1);
+  }
+
+  for (size_t i = 0; i < Sprites.size(); i++)
+  {
+    Sprites[i]->draw();
+  }
 }
 
-void World::setCameraPosition(Vec2& pos)
+void World::setCameraPosition( Vec2& pos)
 {
   cameraPos = pos;
 }
 
 void World::update(float deltatime)
 {
-  //backgroundRatio[0] = (backgroundRatio[0] * deltatime);
-
 
   for each (CSprite* i in Sprites)
   {
-    i->draw();
+    i->update(deltatime);
   }
 }

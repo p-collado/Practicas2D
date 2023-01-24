@@ -42,7 +42,7 @@ public:
     const Vec2& getScrollSpeed(size_t layer) const;
     void setScrollSpeed(size_t layer, Vec2& speed);
     const Vec2& getCameraPosition() const;
-    void setCameraPosition(Vec2& pos);
+    void setCameraPosition( Vec2& pos);
 
     void addSprite(CSprite& sprite);
     void removeSprite(CSprite& sprite);

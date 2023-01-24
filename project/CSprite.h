@@ -41,7 +41,7 @@ public:
 
 
 	void* data;
-	typedef void (*CallbackFunc)(CSprite& _sprite, double* _scale, double _delta);
+	typedef void (*CallbackFunc)(CSprite& _sprite, double _delta);
 	CallbackFunc behaviour;
 	 int currentframe;
 	 static CSprite* loadTexture(const char* filename);
@@ -81,5 +81,6 @@ public:
 	CollisionType getCollisionType() const;
 	const AbsCollider* getCollider() const;
 	bool collides(const CSprite& other) const;
+	void sethframes(int _hframes);
 };
 
